@@ -29,30 +29,32 @@ Written with the goal of modularity towards the shining stack, such that if want
 
 line count breakdown:
 ```
-   176 ../envs/grid_world.py
-   231 ../envs/map_maker.py
-   247 ../envs/test_grid_world.py
-   289 ../algorithms/frontier_based_exploration.py
-    27 ../algorithms/test_frontier_based_exploration.py
-    36 ../integration/test_frontier_online_mapping_integration.py
-   173 ../integration/frontier_online_mapping_integration.py
-    21 ../agents/agent.py
-   604 ../agents/frontier_agent.py
-    46 ../agents/test_frontier_agent.py
-    22 ../sensors/test_sensor_util.py
-   232 ../sensors/sensors.py
-   127 ../sensors/sensor_util.py
-   217 ../footprints/footprints.py
-    46 ../footprints/test_footprints.py
-   119 ../benchmarks/benchmarks.py
+   166 ../benchmarks/benchmarks.py
+   145 ../mapping/costmap.py
+   188 ../mapping/log_odds_mapper.py
+    38 ../mapping/test_costmap.py
     45 ../mapping/test_log_odds_mapper.py
-   135 ../mapping/costmap.py
-   167 ../mapping/log_odds_mapper.py
-    70 ../mapping/test_costmap.py
     39 ../utilities/test_util.py
-   145 ../utilities/util.py
-    11 ../utilities/paths.py
-    94 ../planners/test_planners.py
-   427 ../planners/planners.py
-  3746 total
+    37 ../utilities/paths.py
+    76 ../utilities/visualization.py
+    39 ../utilities/map_transformations.py
+   209 ../utilities/util.py
+   283 ../sensors/sensors.py
+   130 ../sensors/sensor_util.py
+    22 ../sensors/test_sensor_util.py
+   208 ../envs/grid_world.py
+   239 ../envs/map_maker.py
+   247 ../envs/test_grid_world.py
+    79 ../footprints/footprint_points.py
+   311 ../footprints/footprints.py
+    63 ../footprints/test_footprints.py
+    57 ../footprints/collision_cpp.py
+   180 ../planners/astar_cpp.py
+   209 ../planners/test_astar_cpp.py
+    74 ../agents/test_frontier_agent.py
+    34 ../agents/agent.py
+   458 ../agents/frontier_agent.py
+    27 ../algorithms/test_frontier_based_exploration.py
+   271 ../algorithms/frontier_based_exploration.py
+  3874 total
 ```

@@ -63,7 +63,8 @@ def extract_frontiers(occupancy_map, approx=True, approx_iters=2,
         frontier_mask = cv2.dilate(frontier_mask, kernel=kernel, iterations=approx_iters)
         frontier_mask = cv2.erode(frontier_mask, kernel=kernel, iterations=approx_iters)
 
-    frontiers_xy_px = cv2.findContours(frontier_mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)[1]
+    # this indexing will work with opencv 2.x 3.x and 4.x
+    frontiers_xy_px = cv2.findContours(frontier_mask, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)[-2:][0]
     frontiers = [rc_to_xy(np.array(frontier).squeeze(1)[:, ::-1], occupancy_map) for frontier in frontiers_xy_px]
 
     if debug:

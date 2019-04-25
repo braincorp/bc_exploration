@@ -1,3 +1,0 @@
-/home/akhoury/bc_exploration/cpp/build/CMakeFiles/edit_cache.dir
-/home/akhoury/bc_exploration/cpp/build/CMakeFiles/rebuild_cache.dir
-/home/akhoury/bc_exploration/cpp/build/CMakeFiles/exploration.dir

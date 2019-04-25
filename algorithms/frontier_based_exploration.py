@@ -200,7 +200,6 @@ def run_frontier_exploration(map_filename, params_filename, start_state, sensor_
             was_successful = False
             is_last_plan = True
 
-        cv2.waitKey(0)
         # using the current map, make an action plan
         path = frontier_agent.plan(state=pose, occupancy_map=occupancy_map, is_last_plan=is_last_plan)
 
@@ -261,7 +260,7 @@ def main():
                                  completion_percentage=0.98,
                                  max_exploration_iterations=None,
                                  render_size_scale=2.0,
-                                 render_interval=1)
+                                 render_interval=5)
 
     print("Map", "{:.2f}".format(percent_explored * 100), "\b% explored!",
           "This is " + str(iterations_taken) + " iterations!")

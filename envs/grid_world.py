@@ -91,7 +91,7 @@ class GridWorld:
             and not (self.footprint.check_for_collision(state=state, occupancy_map=self.map)
                      if use_inflation else self.footprint_no_inflation.check_for_collision(state=state, occupancy_map=self.map))
 
-    def _load_map(self, filename, map_resolution):
+    def _load_map(self, filename, map_resolution, thicken_obstacles=True):
         """
         Loads map from file into costmap object
         :param filename str: location of the map file
@@ -102,6 +102,15 @@ class GridWorld:
         map_data = cv2.cvtColor(map_data, cv2.COLOR_RGB2GRAY)
         map_data = map_data.astype(np.uint8)
         assert np.max(map_data) == 255
+
+        if thicken_obstacles:
+            occupied_coords = np.argwhere(map_data == Costmap.OCCUPIED)
+            occupied_mask = np.zeros_like(map_data)
+            occupied_mask[occupied_coords[:, 0], occupied_coords[:, 1]] = 1
+            occupied_mask = cv2.dilate(occupied_mask, cv2.getStructuringElement(cv2.MORPH_CROSS, (3, 3)))
+            occupied_coords = np.argwhere(occupied_mask == 1)
+            map_data[occupied_coords[:, 0], occupied_coords[:, 1]] = Costmap.OCCUPIED
+
         self.map = Costmap(data=map_data, resolution=map_resolution, origin=[0., 0.])
 
     def compare_maps(self, occupancy_map):

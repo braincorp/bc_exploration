@@ -226,6 +226,7 @@ class Lidar(Sensor):
         :param angular_range array(N)[float]: the total amount of angle to be covered, all around is 2 * pi, centered at 0 radians in
                               the robots frame
         :param angular_resolution float: angular increment for each ray
+        :param map_resolution float: resolution of the map
         """
         Sensor.__init__(self, sensor_range)
         self._angular_range = angular_range
@@ -234,6 +235,10 @@ class Lidar(Sensor):
         self._ray_angles, self._ego_rays = self.precompute_ego_rays()
 
     def precompute_ego_rays(self):
+        """
+        Precomputes the angles and rays in ego coordinates of the lidar.
+        :return Tuple[array(N)[float], array(N, 2)[float]]: the lidar angles, ray ego coords
+        """
         angles = np.arange(-self._angular_range / 2, self._angular_range / 2 + self._angular_resolution, self._angular_resolution)
 
         ray_points = self._range * np.array([np.cos(angles), np.sin(angles)]).T

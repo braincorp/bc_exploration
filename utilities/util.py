@@ -37,8 +37,8 @@ def which_coords_in_bounds(coords, map_shape):
     :return Union[bool array(N)[bool]]: corresponding to whether the coord is in bounds (if array is given, then it will be
              array of bool)
     """
-    assert isinstance(coords, np.ndarray) and coords.dtype == np.int
-    assert isinstance(map_shape[0], (int, np.int)) and isinstance(map_shape[1], (int, np.int))
+    assert isinstance(coords, np.ndarray) and isinstance(coords.dtype, np.int)
+    assert isinstance(np.array(map_shape).dtype, np.int)
     if len(coords.shape) == 1:
         return coords[0] >= 0 and coords[0] < map_shape[0] and coords[1] >= 0 and coords[1] < map_shape[1]
     else:

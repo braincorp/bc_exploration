@@ -38,7 +38,7 @@ def run_one_frontier(config, return_queue):
     """
     Given a config, run the frontier agent with those params, and put the results in the results queue
     :param config dict: corresponding to all the function params to run_frontier_exploration(...)
-    :param return_queue multiprocessing.Queu:, containing the results for all the processes created
+    :param return_queue multiprocessing.Queue:, containing the results for all the processes created
     """
     # occupancy map cannot be returned, process.join() will hang
     _, percent_explored, iterations_taken, was_sucessful = run_frontier_exploration(**config)
@@ -82,7 +82,7 @@ def run_consistency(frontier_config, num_instances):
     Runs the consistency test, i.e the exploration algothirm is mostly deterministic,
     should it should return very similar results
     :param frontier_config dict: corresponding to all the function params to run_frontier_exploration(...)
-    :param num_instances int, total number of runs to do
+    :param num_instances int: total number of runs to do
     :return List[dict]: results from the benchmark
     """
     consistency_results = run_frontier_benchmark(frontier_config, num_instances=num_instances, num_processes=4)

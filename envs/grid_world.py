@@ -37,6 +37,7 @@ class GridWorld:
                                   else it must be [row, column] of the position you want the robot to start.
                                   it must be a valid location (free space and footprint must fit)
         :param render_size Tuple(int): size of which to render the map (for visualization env.render() )
+        :param thicken_obstacles bool: thicken the obstacles in the map by 1 pixel, to avoid 1 pixel thick walls
         """
 
         self.footprint = footprint
@@ -97,6 +98,7 @@ class GridWorld:
         Loads map from file into costmap object
         :param filename str: location of the map file
         :param map_resolution float: desired resolution of the loaded map
+        :param thicken_obstacles bool: thicken the obstacles in the map by 1 pixel, to avoid 1 pixel thick walls
         """
         map_data = cv2.imread(filename)
         assert map_data is not None and "map file not able to be loaded. Does the file exist?"

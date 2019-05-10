@@ -5,7 +5,6 @@ python:
 
 script:
      # install the package and test
-     -./scripts/use_repo
      - pip install -e .[tests]
      - ./scripts/build_exploration
      - py.test --pep8 -m pep8 -n8

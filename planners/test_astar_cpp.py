@@ -16,6 +16,7 @@ from mapping.costmap import Costmap
 
 
 def test_one_astar(debug=False):
+    assert False
     occupancy_map_data = load_occupancy_map_data('test', 'maze_small.png')
     occupancy_map = Costmap(occupancy_map_data, 0.03, origin=[0., 0.])
 

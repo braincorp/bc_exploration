@@ -30,7 +30,7 @@ def create_frontier_agent_from_params(params_filename):
     """
     assert os.path.exists(params_filename)
     with open(os.path.join(params_filename)) as f:
-        params = yaml.load(f)
+        params = yaml.load(f, Loader=yaml.FullLoader)
 
     assert params['algorithm'] == 'frontier'
     if params['footprint']['type'] == 'tricky_circle':

@@ -6,6 +6,7 @@ python:
 script:
      # install the package and test
      - pip install -e .[tests]
-     - ./scripts/build_exploration.sh
+     - ./scripts/build_exploration
      - py.test --pep8 -m pep8 -n8
      - py.test -n8
+     - ./scripts/test_pylint

@@ -114,7 +114,7 @@ def run_frontier_benchmarks():
     sensor_range = 10.0
     completion_percentage = 0.95
     max_exploration_iterations = 75
-    params = "params/vw_params.yaml"
+    params = "params/params.yaml"
 
     # individual parameters
     maps_to_run = ["brain/vw_ground_truth_full_edited.png"]

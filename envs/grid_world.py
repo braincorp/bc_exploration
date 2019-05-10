@@ -24,7 +24,8 @@ class GridWorld:
                  sensor,
                  footprint,
                  start_state=None,
-                 render_size=(500, 500)):
+                 render_size=(500, 500),
+                 thicken_obstacles=True):
         """
         Creates an interactive grid world environment structured similar to open ai gym.
         Allows for moving, sensing, and visualizing within the space. Map loaded is based off the map_filename.
@@ -49,7 +50,7 @@ class GridWorld:
         self.map = None
         self.truth_free_coords = None
 
-        self._load_map(map_filename, map_resolution)
+        self._load_map(map_filename, map_resolution, thicken_obstacles=thicken_obstacles)
 
         self.start_state = np.array(start_state).astype(np.float) \
             if start_state is not None else self._get_random_start_state()

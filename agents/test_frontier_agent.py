@@ -1,6 +1,7 @@
 from __future__ import print_function, absolute_import, division
 
 import cv2
+import os
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -38,7 +39,7 @@ def test_plan(debug=False):
     occupancy_map = Costmap(data=occupancy_map_data, resolution=0.03, origin=np.array([-6.305, -6.305]))
     pose = np.array([.8, 0, -0.51759265])
 
-    frontier_agent = create_frontier_agent_from_params(get_exploration_dir() + '/params/vw_params.yaml')
+    frontier_agent = create_frontier_agent_from_params(os.path.join(get_exploration_dir(), "params/params.yaml"))
     frontier_agent.is_first_plan = False
 
     plan = frontier_agent.plan(pose, occupancy_map)
@@ -52,7 +53,7 @@ def debug_frontier_agent():
     data = np.load('debug3.npy')
     state = data[0]
     occupancy_map = data[1]
-    frontier_agent = create_frontier_agent_from_params(get_exploration_dir() + '/params/vw_params.yaml')
+    frontier_agent = create_frontier_agent_from_params(get_exploration_dir() + '/params/params.yaml')
 
     path = frontier_agent.plan(state, occupancy_map)
 

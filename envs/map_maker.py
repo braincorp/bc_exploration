@@ -10,7 +10,13 @@ import cv2
 import numpy as np
 
 from functools import partial
-from Tkinter import Canvas, Tk, Label, Entry, LEFT, X, Button
+
+try:
+    # for Python2
+    from Tkinter import Canvas, Tk, Label, Entry, LEFT, X, Button
+except ImportError:
+    # for Python3
+    from tkinter import Canvas, Tk, Label, Entry, LEFT, X, Button
 
 from utilities.paths import get_maps_dir
 

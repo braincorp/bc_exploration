@@ -8,4 +8,3 @@ script:
      - pip install -e .[tests]
      - py.test --pep8 -m pep8 -n8
      - py.test -n8
-     - ./test_pylint

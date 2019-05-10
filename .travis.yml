@@ -6,5 +6,6 @@ python:
 script:
      # install the package and test
      - pip install -e .[tests]
+     - ./scripts/build_exploration.sh
      - py.test --pep8 -m pep8 -n8
      - py.test -n8

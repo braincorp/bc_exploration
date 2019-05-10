@@ -22,11 +22,6 @@ Frontier-based exploration implemented with a few different behavioral modes, ea
 Includes integration with online mapping.
 Includes benchmarking framework / benchmarks
 
-Written with the goal of modularity towards the shining stack, such that if wanted, we can remove all dependencies on brain's code, and it will run without brain's code. The intention is to possibly release some of it as open source / share the code with research professors
-
-**still missing some unit tests, I will add more tests in the next PR, but this needs to be merged so that Mark can make a PR**
-
-
 line count breakdown:
 ```
    166 ../benchmarks/benchmarks.py

@@ -18,7 +18,7 @@ setup(
     download_url='',
     license='Braincorp',
     install_requires=['numpy>=1.11.0',
-		      'matplotlib==2.2.3',
+                      'matplotlib==2.2.3',
                       'opencv-python',
                       'pyyaml==5.1'],
     package_data={'': ['input']},

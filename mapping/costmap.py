@@ -115,15 +115,15 @@ class Costmap:
         :return CostMap2D: brain formatted costmap
         """
         costmap_data = self.data.copy()
-        costmap_data[self.data == Costmap.FREE] = CostMap2D.FREE_SPACE
-        costmap_data[self.data == Costmap.OCCUPIED] = CostMap2D.LETHAL_OBSTACLE
-        costmap_data[self.data == Costmap.UNEXPLORED] = CostMap2D.NO_INFORMATION
+        costmap_data[self.data == Costmap.FREE] = CostMap2D.FREE_SPACE  # pylint: disable=undefined-variable
+        costmap_data[self.data == Costmap.OCCUPIED] = CostMap2D.LETHAL_OBSTACLE  # pylint: disable=undefined-variable
+        costmap_data[self.data == Costmap.UNEXPLORED] = CostMap2D.NO_INFORMATION  # pylint: disable=undefined-variable
 
-        return CostMap2D(data=np.flipud(costmap_data), resolution=self.resolution,
+        return CostMap2D(data=np.flipud(costmap_data), resolution=self.resolution,  # pylint: disable=undefined-variable
                          origin=self.origin.astype(np.float64))
 
     @staticmethod
-    def from_brain_costmap(brain_costmap):  # pylint: disable=extra-argument-docstring
+    def from_brain_costmap(brain_costmap):  # pylint: disable=extra-argument-docstring, undefined-variable
         """
         Convert a brain CostMap2D object to a Costmap object. We need to remove the padding that is given, and
         change the values to Costmap format
@@ -136,10 +136,10 @@ class Costmap:
         brain_costmap_data = np.flipud(brain_costmap_data)
 
         costmap_data = brain_costmap_data.copy()
-        costmap_data[brain_costmap_data == CostMap2D.FREE_SPACE] = Costmap.FREE
-        costmap_data[brain_costmap_data == CostMap2D.LETHAL_OBSTACLE] = Costmap.OCCUPIED
+        costmap_data[brain_costmap_data == CostMap2D.FREE_SPACE] = Costmap.FREE  # pylint: disable=undefined-variable
+        costmap_data[brain_costmap_data == CostMap2D.LETHAL_OBSTACLE] = Costmap.OCCUPIED  # pylint: disable=undefined-variable
         costmap_data[brain_costmap_data == 100] = Costmap.OCCUPIED  # another brain occupied value
-        costmap_data[brain_costmap_data == CostMap2D.NO_INFORMATION] = Costmap.UNEXPLORED
+        costmap_data[brain_costmap_data == CostMap2D.NO_INFORMATION] = Costmap.UNEXPLORED  # pylint: disable=undefined-variable
         return Costmap(data=costmap_data,
                        resolution=brain_costmap_resolution,
                        origin=brain_costmap.get_origin())

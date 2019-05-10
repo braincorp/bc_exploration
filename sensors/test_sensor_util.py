@@ -1,7 +1,8 @@
 from __future__ import print_function, absolute_import, division
 
 import numpy as np
-from shining_software.exploration.sensors.sensor_util import bresenham2d
+
+from sensors.sensor_util import bresenham2d
 
 
 def test_bresenham2d():

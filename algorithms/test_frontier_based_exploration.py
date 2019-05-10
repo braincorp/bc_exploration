@@ -10,7 +10,7 @@ def test_frontier_based_exploration():
     np.random.seed(3)
     _, _, _, _ = \
         run_frontier_exploration(map_filename=os.path.join(get_maps_dir(), "test/vw_ground_truth_test.png"),
-                                 params_filename=os.path.join(get_exploration_dir(), "params/vw_params.yaml"),
+                                 params_filename=os.path.join(get_exploration_dir(), "params/params.yaml"),
                                  map_resolution=0.03,
                                  start_state=None,
                                  sensor_range=10.0,

@@ -15,7 +15,7 @@ def test_creation():
     footprint = CustomFootprint(np.array([[0., 0.]]), np.pi / 2)
     env = GridWorld(map_filename=test_map_filename, footprint=footprint,
                     sensor=Neighborhood(sensor_range=1, values=[0, 255]),
-                    start_state=[1, 3, 0], map_resolution=1)
+                    start_state=[1, 3, 0], map_resolution=1, thicken_obstacles=False)
     assert np.all(env.state == [0, 0, 0])
     assert np.all(env.map.data == [[0, 0, 0, 0, 0],
                                    [0, 255, 255, 255, 0],
@@ -39,7 +39,7 @@ def test_reset():
     footprint = CustomFootprint(np.array([[0., 0.]]), np.pi / 2)
     env = GridWorld(map_filename=test_map_filename, footprint=footprint,
                     sensor=Neighborhood(sensor_range=1, values=[0, 255]),
-                    start_state=[1, 3, 0], map_resolution=1)
+                    start_state=[1, 3, 0], map_resolution=1, thicken_obstacles=False)
     env.state = np.array([70, 70, 0])
     env.reset()
     assert np.all(env.state == [0, 0, 0])
@@ -60,7 +60,7 @@ def test_step_movement():
     footprint = CustomFootprint(np.array([[0., 0.]]), np.pi / 2)
     env = GridWorld(map_filename=test_map_filename, footprint=footprint,
                     sensor=Neighborhood(sensor_range=1, values=[0, 255]),
-                    start_state=[1, 3, 0], map_resolution=1)
+                    start_state=[1, 3, 0], map_resolution=1, thicken_obstacles=False)
 
     # todo test is broken (not out of bounds, all obstacles) we arent testing out of bounds
     # test up out of bounds
@@ -139,7 +139,7 @@ def test_step_data():
     footprint = CustomFootprint(np.array([[0., 0.]]), np.pi / 2)
     env = GridWorld(map_filename=test_map_filename, footprint=footprint,
                     sensor=Neighborhood(sensor_range=1, values=[0, 255]),
-                    start_state=[1, 3, 0], map_resolution=1)
+                    start_state=[1, 3, 0], map_resolution=1, thicken_obstacles=False)
 
     _, data = env.reset()
 
@@ -160,7 +160,7 @@ def test_step_data():
     footprint = CustomFootprint(np.array([[0., 0.]]), np.pi / 2)
     env = GridWorld(map_filename=test_map_filename, footprint=footprint,
                     sensor=Neighborhood(sensor_range=2, values=[0, 255]),
-                    start_state=[1, 3, 0], map_resolution=1)
+                    start_state=[1, 3, 0], map_resolution=1, thicken_obstacles=False)
 
     _, data = env.step([0, 1, 0])
 
@@ -200,7 +200,7 @@ def test_compare_maps():
     footprint = CustomFootprint(np.array([[0., 0.]]), np.pi / 2)
     env = GridWorld(map_filename=test_map_filename, footprint=footprint,
                     sensor=Neighborhood(sensor_range=1, values=[0, 255]),
-                    start_state=[1, 3, 0], map_resolution=1)
+                    start_state=[1, 3, 0], map_resolution=1, thicken_obstacles=False)
 
     map_data = np.array([[0, 0, 0, 0, 0],
                          [0, 255, 255, 0, 0],
@@ -226,7 +226,7 @@ def main():
         footprint = CustomFootprint(np.array([[0., 0.]]), np.pi / 2)
         env = GridWorld(map_filename=test_map_filename, footprint=footprint,
                         sensor=Neighborhood(sensor_range=1, values=[0, 255]),
-                        start_state=[1, 3, 0], map_resolution=1)
+                        start_state=[1, 3, 0], map_resolution=1, thicken_obstacles=False)
         _, _ = env.reset()
 
         path = np.array([[0, -1, 0],

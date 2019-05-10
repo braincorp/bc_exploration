@@ -1,5 +1,6 @@
 #include "../../inc/exploration/astar.h"
 #include "../../inc/exploration/util.h"
+#include <stdexcept>
 
 extern "C" bool astar(const int* start, const int* goal,
                       const uint8_t* occupancy_map, const int* map_shape, const int planning_scale,

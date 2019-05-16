@@ -1,0 +1,11 @@
+numpy>=1.11.0
+matplotlib==2.2.3
+opencv-python
+pyyaml==5.1
+
+[tests]
+pytest==4.3.0
+pytest-pep8==1.0.6
+pytest-xdist==1.26.1
+pylint==1.9.2
+astroid==1.6.5

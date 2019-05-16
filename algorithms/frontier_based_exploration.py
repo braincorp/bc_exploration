@@ -20,6 +20,9 @@ from utilities.paths import get_maps_dir, get_exploration_dir
 from utilities.util import xy_to_rc, which_coords_in_bounds, scan_to_points
 from utilities.visualization import draw_footprint_path, draw_frontiers, draw_scan_ranges
 
+from bc_gym_planning_env.envs.synth_turn_env import RandomAisleTurnEnv
+from bc_gym_planning_env.utilities.costmap_2d import CostMap2D
+
 
 def create_frontier_agent_from_params(params_filename):
     """
@@ -111,8 +114,46 @@ def visualize(occupancy_map, state, scan_angles, scan_ranges, footprint, path, r
     cv2.waitKey(wait_key)
 
 
+def visualize_in_gym(gym_env, exp_map, path, pose):
+    """
+    Alternative visualization method using gym rendering function
+    :param gym_env RandomAisleTurnEnv: object storing the robot and environment state in bc_gym_planning_env standard
+    :param exp_map Costmap: occupancy map in bc_exploration standard
+    :param path array(N, 3)[float]: containing an array of poses for the robot to follow
+    :param pose array(3)[float]: corresponds to the pose of the robot [x, y, theta]
+    """
+
+    gym_compat_map = np.zeros(exp_map.data.shape,dtype=np.uint8)
+    gym_compat_map[exp_map.data == Costmap.OCCUPIED] = CostMap2D.LETHAL_OBSTACLE
+    gym_compat_map[exp_map.data == Costmap.FREE] = CostMap2D.FREE_SPACE
+    gym_compat_map[exp_map.data == Costmap.UNEXPLORED] = CostMap2D.NO_INFORMATION
+
+    gym_costmap = CostMap2D(np.flipud(gym_compat_map),exp_map.resolution,exp_map.origin.copy())
+
+    gym_state = gym_env.get_state()
+
+    if np.array(path).shape[0]:
+        gym_state.path = path
+        gym_state.original_path = path
+    else:
+        gym_state.path = pose[None,:]
+        gym_state.original_path = pose[None,:]
+
+    gym_state.costmap = gym_costmap
+
+    gym_state.pose = pose
+
+    gym_state.robot_state.x = pose[0]
+    gym_state.robot_state.y = pose[1]
+    gym_state.robot_state.angle = pose[2]
+
+    gym_env.set_state(gym_state)
+
+    gym_env.render(mode='human')
+
+
 def run_frontier_exploration(map_filename, params_filename, start_state, sensor_range, map_resolution,
-                             completion_percentage, render=True, render_interval=1, render_size_scale=1.7,
+                             completion_percentage, render=True, render_mode='exp', render_interval=1, render_size_scale=1.7,
                              completion_check_interval=1, render_wait_for_key=True, max_exploration_iterations=None):
     """
     Interface for running frontier exploration on the grid world environment that is initialized via map_filename.. etc
@@ -154,6 +195,9 @@ def run_frontier_exploration(map_filename, params_filename, start_state, sensor_
                     footprint=footprint,
                     start_state=start_state)
 
+    # setup corresponding gym environment
+    env_instance = RandomAisleTurnEnv()
+
     render_size = (np.array(env.get_map_shape()[::-1]) * render_size_scale).astype(np.int)
 
     # setup log-odds mapper, we assume the measurements are very accurate,
@@ -182,9 +226,15 @@ def run_frontier_exploration(map_filename, params_filename, start_state, sensor_
     occupancy_map = mapper.update(state=pose, scan_angles=scan_angles, scan_ranges=scan_ranges)
 
     if render:
-        visualize(occupancy_map=occupancy_map, state=pose, footprint=footprint,
-                  start_state=start_state, scan_angles=scan_angles, scan_ranges=scan_ranges, path=[],
-                  render_size=render_size, frontiers=[], wait_key=0 if render_wait_for_key else 1)
+        if render_mode == 'exp':
+            visualize(occupancy_map=occupancy_map, state=pose, footprint=footprint,
+                      start_state=start_state, scan_angles=scan_angles, scan_ranges=scan_ranges, path=[],
+                      render_size=render_size, frontiers=[], wait_key=0 if render_wait_for_key else 1)
+        elif render_mode == 'gym':
+            visualize_in_gym(gym_env=env_instance, exp_map=occupancy_map, path=[], pose=pose)
+        else:
+            raise NameError("Invalid rendering method.\nPlease choose one of \"exp\" or \"gym\" methods.")
+
 
     iteration = 0
     is_last_plan = False
@@ -228,11 +278,17 @@ def run_frontier_exploration(map_filename, params_filename, start_state, sensor_
 
             # shows a live visualization of the exploration process if render is set to true
             if render and j % render_interval == 0:
-                visualize(occupancy_map=occupancy_map, state=pose, footprint=footprint,
-                          start_state=start_state, scan_angles=scan_angles, scan_ranges=scan_ranges,
-                          path=path, render_size=render_size,
-                          frontiers=frontier_agent.get_frontiers(compute=True, occupancy_map=occupancy_map), wait_key=1,
-                          path_idx=j)
+                if render_mode == 'exp':
+                    visualize(occupancy_map=occupancy_map, state=pose, footprint=footprint,
+                              start_state=start_state, scan_angles=scan_angles, scan_ranges=scan_ranges,
+                              path=path, render_size=render_size,
+                              frontiers=frontier_agent.get_frontiers(compute=True, occupancy_map=occupancy_map),
+                              wait_key=1,
+                              path_idx=j)
+                elif render_mode == 'gym':
+                    visualize_in_gym(gym_env=env_instance, exp_map=occupancy_map, path=path, pose=pose)
+                else:
+                    raise NameError("Invalid rendering method.\nPlease choose one of \"exp\" or \"gym\" methods.")
 
         if is_last_plan:
             break

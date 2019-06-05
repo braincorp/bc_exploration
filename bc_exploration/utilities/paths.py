@@ -28,10 +28,15 @@ def get_exploration_so_path():
     Get the exploration binary directory (with the .so) either from brain (if exists) or locally
     :return str: path to the exploration.so file used for planning with cpp planners
     """
-    local_so_path = os.path.join(get_exploration_dir(), 'cpp/bin/exploration.so')
-    if os.path.exists(local_so_path):
-        return local_so_path
-    else:
-        raise OSError(local_so_path + "not found. please make sure source is compiled."
-                      "call make patch.exploration-cpp outside sandbox to build, "
-                      "or 'cmake .. && make' in cpp/build/ folder in exploration")
+    if not hasattr(get_exploration_so_path, 'local_so_path'):
+        local_so_paths = [os.path.join(dp, f)
+                          for dp, dn, filenames in os.walk(os.path.join(get_exploration_dir(), "../build/"))
+                          for f in filenames if f == 'exploration.so']
+        if local_so_paths:
+            get_exploration_so_path.local_so_path = local_so_paths[0]
+        else:
+            raise OSError(local_so_paths[0] + "not found. please make sure source is compiled."
+                                              "call make patch.exploration-cpp outside sandbox to build, "
+                                              "or 'cmake .. && make' in cpp/build/ folder in exploration")
+
+    return get_exploration_so_path.local_so_path

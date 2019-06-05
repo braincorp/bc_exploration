@@ -3,7 +3,7 @@ setup.py for bc_exploration
 """
 from __future__ import print_function, absolute_import, division
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Extension
 
 with open("README.md", "r") as f:
     long_description = f.read()
@@ -46,4 +46,15 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     packages=find_packages(),
+    ext_modules=[Extension('exploration',
+                           extra_compile_args=['-std=c++11', '-O3', '-Wall', '-shared', '-fpic'],
+                           include_dirs=['bc_exploration/cpp/inc'],
+                           sources=[
+                               'bc_exploration/cpp/src/exploration/astar.cpp',
+                               'bc_exploration/cpp/src/exploration/collision.cpp',
+                               'bc_exploration/cpp/src/exploration/util.cpp'
+                           ])
+    ]
 )
+
+

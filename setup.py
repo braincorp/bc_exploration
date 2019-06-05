@@ -55,5 +55,3 @@ setup(
                                'bc_exploration/cpp/src/exploration/util.cpp'
                            ])]
 )
-
-

@@ -53,8 +53,7 @@ setup(
                                'bc_exploration/cpp/src/exploration/astar.cpp',
                                'bc_exploration/cpp/src/exploration/collision.cpp',
                                'bc_exploration/cpp/src/exploration/util.cpp'
-                           ])
-    ]
+                           ])]
 )
 
 

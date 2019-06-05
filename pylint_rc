@@ -3,12 +3,12 @@
 # A comma-separated list of package or module names from where C extensions may
 # be loaded. Extensions are loading into the active Python interpreter and may
 # run arbitrary code
-extension-pkg-whitelist=ompl,brainos
+extension-pkg-whitelist=
 
 # Add files or directories to the blacklist. They should be base names, not
 # paths.
 # Braincorp: This seems to be buggy for files and works on directories only
-ignore=scipy_functions, bc_linters
+ignore=bc_linters
 
 # Add files or directories matching the regex patterns to the blacklist. The
 # regex matches against base names, not paths.
@@ -23,7 +23,7 @@ jobs=8
 
 # List of plugins (as comma separated values of python modules names) to load,
 # usually to register additional checkers.
-load-plugins=misc.bc_linters.check_illegal_imports, misc.bc_linters.check_illegal_constructs, misc.bc_linters.docstring_checker
+load-plugins=bc_linters.check_illegal_imports, bc_linters.check_illegal_constructs, bc_linters.docstring_checker
 
 # Pickle collected data for later comparisons.
 persistent=yes

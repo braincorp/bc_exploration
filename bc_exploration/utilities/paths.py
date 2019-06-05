@@ -31,12 +31,12 @@ def get_exploration_so_path():
     if not hasattr(get_exploration_so_path, 'local_so_path'):
         local_so_paths = [os.path.join(dp, f)
                           for dp, dn, filenames in os.walk(os.path.join(get_exploration_dir(), "../build/"))
-                          for f in filenames if f == 'exploration.so']
+                          for f in filenames if f.split('.')[0] == 'exploration' and f.split('.')[-1] == 'so']
         if local_so_paths:
             get_exploration_so_path.local_so_path = local_so_paths[0]
         else:
-            raise OSError(local_so_paths[0] + "not found. please make sure source is compiled."
-                                              "call make patch.exploration-cpp outside sandbox to build, "
-                                              "or 'cmake .. && make' in cpp/build/ folder in exploration")
+            raise OSError("exploration.so not found. please make sure source is compiled."
+                          "call make patch.exploration-cpp outside sandbox to build, "
+                          "or 'cmake .. && make' in cpp/build/ folder in exploration")
 
     return get_exploration_so_path.local_so_path

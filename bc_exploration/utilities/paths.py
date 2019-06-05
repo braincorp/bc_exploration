@@ -30,7 +30,7 @@ def get_exploration_so_path():
     """
     if not hasattr(get_exploration_so_path, 'local_so_path'):
         local_so_paths = [os.path.join(dp, f)
-                          for dp, dn, filenames in os.walk(os.path.join(get_exploration_dir(), "../build/"))
+                          for dp, _, filenames in os.walk(os.path.join(get_exploration_dir(), "../build/"))
                           for f in filenames if f.split('.')[0] == 'exploration' and f.split('.')[-1] == 'so']
         if local_so_paths:
             get_exploration_so_path.local_so_path = local_so_paths[0]

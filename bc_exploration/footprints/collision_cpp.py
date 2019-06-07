@@ -8,17 +8,18 @@ import numpy as np
 
 from bc_exploration.utilities.paths import get_exploration_so_path
 from bc_exploration.utilities.util import xy_to_rc
+from bc_exploration._exploration_module import check_for_collision2 as c_check_for_collision
 
-int_1d_type = np.ctypeslib.ndpointer(dtype=np.int32, ndim=1, flags='C_CONTIGUOUS')
-int_2d_type = np.ctypeslib.ndpointer(dtype=np.int32, ndim=2, flags='C_CONTIGUOUS')
-bool_2d_type = np.ctypeslib.ndpointer(dtype=np.bool, ndim=2, flags='C_CONTIGUOUS')
-uint8_1d_type = np.ctypeslib.ndpointer(dtype=np.uint8, ndim=1, flags='C_CONTIGUOUS')
-uint8_2d_type = np.ctypeslib.ndpointer(dtype=np.uint8, ndim=2, flags='C_CONTIGUOUS')
-
-c_check_for_collision = ctypes.cdll.LoadLibrary(get_exploration_so_path()).check_for_collision
-c_check_for_collision.restype = ctypes.c_bool
-c_check_for_collision.argtypes = [int_1d_type, uint8_2d_type, int_1d_type, bool_2d_type, ctypes.c_int32,
-                                  int_2d_type, ctypes.c_int32, uint8_1d_type, ctypes.c_int32]
+# int_1d_type = np.ctypeslib.ndpointer(dtype=np.int32, ndim=1, flags='C_CONTIGUOUS')
+# int_2d_type = np.ctypeslib.ndpointer(dtype=np.int32, ndim=2, flags='C_CONTIGUOUS')
+# bool_2d_type = np.ctypeslib.ndpointer(dtype=np.bool, ndim=2, flags='C_CONTIGUOUS')
+# uint8_1d_type = np.ctypeslib.ndpointer(dtype=np.uint8, ndim=1, flags='C_CONTIGUOUS')
+# uint8_2d_type = np.ctypeslib.ndpointer(dtype=np.uint8, ndim=2, flags='C_CONTIGUOUS')
+#
+# c_check_for_collision = ctypes.cdll.LoadLibrary(get_exploration_so_path()).check_for_collision
+# c_check_for_collision.restype = ctypes.c_bool
+# c_check_for_collision.argtypes = [int_1d_type, uint8_2d_type, int_1d_type, bool_2d_type, ctypes.c_int32,
+#                                   int_2d_type, ctypes.c_int32, uint8_1d_type, ctypes.c_int32]
 
 
 def check_for_collision(state, occupancy_map, footprint_mask, mask_radius, outline_coords, obstacle_values):
@@ -39,19 +40,14 @@ def check_for_collision(state, occupancy_map, footprint_mask, mask_radius, outli
     state_px = xy_to_rc(state, occupancy_map)
     c_state = np.array(state_px[:2], dtype=np.int32)
     c_occupancy_map = occupancy_map.data.astype(np.uint8)
-    c_map_shape = np.array(occupancy_map.get_shape(), dtype=np.int32)
     c_footprint_mask = np.logical_not(np.array(footprint_mask, dtype=np.bool))
     c_outline_coords = np.array(outline_coords, dtype=np.int32)
     c_obstacle_values = np.array(obstacle_values, dtype=np.uint8)
 
     is_colliding = c_check_for_collision(c_state,
                                          c_occupancy_map,
-                                         c_map_shape,
                                          c_footprint_mask,
-                                         mask_radius,
                                          c_outline_coords,
-                                         c_outline_coords.shape[0],
-                                         c_obstacle_values,
-                                         c_obstacle_values.shape[0])
+                                         c_obstacle_values)
 
     return is_colliding

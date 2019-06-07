@@ -6,3 +6,6 @@
 **build
 **bin
 **.egg-info
+**lib
+**.so
+**.a

@@ -6,6 +6,12 @@
 #include <cmath>
 #include <stack>
 #include <vector>
+#include <stdexcept>
+
+#include <pybind11/pybind11.h>
+#include <pybind11/numpy.h>
+#include <pybind11/stl.h>
+#include <pybind11/functional.h>
 
 #include "collision.h"
 
@@ -16,9 +22,7 @@ struct Node {
   Node(const float f, const int idx) : f(f), idx(idx) {}
 };
 
-bool operator>(const Node &n1, const Node &n2) {
-  return n1.f > n2.f;
-}
+bool operator>(const Node &n1, const Node &n2);
 
 extern "C" bool astar(const int* start, const int* goal,
                       const uint8_t* occupancy_map, const int* map_shape, int planning_scale,
@@ -26,12 +30,11 @@ extern "C" bool astar(const int* start, const int* goal,
                       float delta, float epsilon, bool allow_diagonal,
                       int* path);
 
-extern "C" void get_astar_angles(float* angles);
+std::vector<float> get_astar_angles();
 
-extern "C" bool oriented_astar(const int* start, const int* goal,
-                               const uint8_t* occupancy_map, const int* map_shape, int costmap_scale,
-                               const bool* footprint_masks, const float* mask_angles, int mask_radius,
-                               const int* outline_coords, int num_coords,
-                               const uint8_t* obstacle_values, int num_obstacle_values,
-                               float delta, float epsilon, bool allow_diagonal,
-                               int* path_idxs, float* path_angles);
+std::tuple<bool, std::vector<int>, std::vector<float>> oriented_astar(const int* start, const int* goal,
+                                              const uint8_t* occupancy_map, const int* map_shape,  int planning_scale,
+                                              const bool* footprint_masks, const float* mask_angles, int mask_radius,
+                                              const int* outline_coords, int num_coords,
+                                              const uint8_t* obstacle_values, int num_obstacle_values,
+                                              float delta, float epsilon, bool allow_diagonal);

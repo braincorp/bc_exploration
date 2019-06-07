@@ -46,12 +46,23 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     packages=find_packages(),
-    ext_modules=[Extension('exploration',
-                           extra_compile_args=['-std=c++11', '-O3', '-Wall', '-shared', '-fpic'],
-                           include_dirs=['bc_exploration/cpp/inc'],
+    # ext_modules=[Extension('exploration',
+    #                        extra_compile_args=['-std=c++11', '-O3', '-Wall', '-shared', '-fpic'],
+    #                        include_dirs=['bc_exploration/cpp/inc'],
+    #                        sources=[
+    #                            'bc_exploration/cpp/src/exploration/astar.cpp',
+    #                            'bc_exploration/cpp/src/exploration/collision.cpp',
+    #                            'bc_exploration/cpp/src/exploration/util.cpp'
+    #                        ])]
+    ext_package='bc_exploration',
+    ext_modules=[Extension('_exploration_module',
+                           extra_compile_args=['-std=c++1y', '-O3', '-Wall', '-fpic'],
+                           include_dirs=['deps/pybind11/include',
+                                         'bc_exploration/cpp/inc'],
                            sources=[
                                'bc_exploration/cpp/src/exploration/astar.cpp',
                                'bc_exploration/cpp/src/exploration/collision.cpp',
-                               'bc_exploration/cpp/src/exploration/util.cpp'
+                               'bc_exploration/cpp/src/exploration/util.cpp',
+                               'bc_exploration/cpp/src/exploration/python.cpp'
                            ])]
 )

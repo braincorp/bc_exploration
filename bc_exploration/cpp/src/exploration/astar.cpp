@@ -1,6 +1,12 @@
 #include "../../inc/exploration/astar.h"
 #include "../../inc/exploration/util.h"
-#include <stdexcept>
+
+namespace py = pybind11;
+using OrientedPlanningResult = std::tuple<bool, std::vector<int>, std::vector<float> >;
+
+bool operator>(const Node &n1, const Node &n2) {
+  return n1.f > n2.f;
+}
 
 extern "C" bool astar(const int* start, const int* goal,
                       const uint8_t* occupancy_map, const int* map_shape, const int planning_scale,
@@ -136,12 +142,13 @@ extern "C" bool astar(const int* start, const int* goal,
 }
 
 
-extern "C" void get_astar_angles(float* angles) {
+std::vector<float> get_astar_angles() {
 
   // these angles correspond to the x,y world converted
   // angles of moving in the corresponding
   // children direction in the astar algorithm
   // see astar assignment of children.
+  std::vector<float> angles(8);
   angles[0] = (float) -M_PI;
   angles[1] = (float) (-3.*M_PI_4);
   angles[2] = (float) -M_PI_2;
@@ -150,16 +157,17 @@ extern "C" void get_astar_angles(float* angles) {
   angles[5] = (float) M_PI_4;
   angles[6] = (float) M_PI_2;
   angles[7] = (float) (3.*M_PI_4);
+
+  return angles;
 }
 
 
-extern "C" bool oriented_astar(const int* start, const int* goal,
-                               const uint8_t* occupancy_map, const int* map_shape, const int planning_scale,
-                               const bool* footprint_masks, const float* mask_angles, const int mask_radius,
-                               const int* outline_coords, const int num_coords,
-                               const uint8_t* obstacle_values, const int num_obstacle_values,
-                               const float delta, const float epsilon, const bool allow_diagonal,
-                               int* path_idxs, float* path_angles) {
+OrientedPlanningResult oriented_astar(const int* start, const int* goal,
+                                      const uint8_t* occupancy_map, const int* map_shape, const int planning_scale,
+                                      const bool* footprint_masks, const float* mask_angles, const int mask_radius,
+                                      const int* outline_coords, const int num_coords,
+                                      const uint8_t* obstacle_values, const int num_obstacle_values,
+                                      const float delta, const float epsilon, const bool allow_diagonal) {
   /* Oriented A* algorithm, does not plan on angular space, rather has assigned angles for each movement direction.
    *
    * :param start: 1x3 array with start coordinate [row, column]
@@ -189,16 +197,16 @@ extern "C" bool oriented_astar(const int* start, const int* goal,
   // todo: we arent going to goal angle.. we need to make sure we collision check it if we want to.
   const float inf = std::numeric_limits<float>::infinity();
 
-  // verify angles are correct (i.e human knows what he is doing when he calls this function)
-  float correct_angles[8];
-  get_astar_angles(correct_angles);
-  for (int i = 0; i < 8; i++) {
-    if (correct_angles[i] != mask_angles[i]) {
-      throw std::logic_error("ERROR: parameter mask_angles of c++ function oriented_astar() does not match required angles. "
-                             "See get_astar_angles() for the correct angles/order. "
-                             "Note, the footprint masks must match these angles, or you will get undesired behavior!");
-    }
-  }
+//  // verify angles are correct (i.e human knows what he is doing when he calls this function)
+//  float correct_angles[8];
+//  get_astar_angles(correct_angles);
+//  for (int i = 0; i < 8; i++) {
+//    if (correct_angles[i] != mask_angles[i]) {
+//      throw std::logic_error("ERROR: parameter mask_angles of c++ function oriented_astar() does not match required angles. "
+//                             "See get_astar_angles() for the correct angles/order. "
+//                             "Note, the footprint masks must match these angles, or you will get undesired behavior!");
+//    }
+//  }
 
   // verify planning scale is correct
   if (planning_scale < 1) {
@@ -313,6 +321,15 @@ extern "C" bool oriented_astar(const int* start, const int* goal,
     current_angle = mask_angles[paths_angle_inds[current_idx]];
   }
 
+  std::vector<int> path_idxs((ulong) map_shape[0]*map_shape[1]);
+  for (int i = 0; i < map_shape[0]*map_shape[1]; i++) {
+    path_idxs[i] = -1;
+  }
+  std::vector<float> path_angles((ulong) map_shape[0]*map_shape[1]);
+  for (int i = 0; i < map_shape[0]*map_shape[1]; i++) {
+    path_angles[i] = -1;
+  }
+
   int i = 0;
   std::pair<int, float> item;
   while(!path_stack.empty()) {
@@ -324,5 +341,5 @@ extern "C" bool oriented_astar(const int* start, const int* goal,
   }
 
   std::cout << "expanded " << num_nodes_expanded << " nodes. successful: " << is_successful << std::endl;
-  return is_successful;
+  return std::make_tuple(is_successful, path_idxs, path_angles);
 }

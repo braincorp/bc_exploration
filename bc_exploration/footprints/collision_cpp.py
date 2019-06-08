@@ -3,26 +3,14 @@ Contains python wrappers for c++ code for footprint collision checking.
 """
 from __future__ import print_function, absolute_import, division
 
-import ctypes
 import numpy as np
 
-from bc_exploration.utilities.paths import get_exploration_so_path
 from bc_exploration.utilities.util import xy_to_rc
-from bc_exploration._exploration_module import check_for_collision2 as c_check_for_collision
-
-# int_1d_type = np.ctypeslib.ndpointer(dtype=np.int32, ndim=1, flags='C_CONTIGUOUS')
-# int_2d_type = np.ctypeslib.ndpointer(dtype=np.int32, ndim=2, flags='C_CONTIGUOUS')
-# bool_2d_type = np.ctypeslib.ndpointer(dtype=np.bool, ndim=2, flags='C_CONTIGUOUS')
-# uint8_1d_type = np.ctypeslib.ndpointer(dtype=np.uint8, ndim=1, flags='C_CONTIGUOUS')
-# uint8_2d_type = np.ctypeslib.ndpointer(dtype=np.uint8, ndim=2, flags='C_CONTIGUOUS')
-#
-# c_check_for_collision = ctypes.cdll.LoadLibrary(get_exploration_so_path()).check_for_collision
-# c_check_for_collision.restype = ctypes.c_bool
-# c_check_for_collision.argtypes = [int_1d_type, uint8_2d_type, int_1d_type, bool_2d_type, ctypes.c_int32,
-#                                   int_2d_type, ctypes.c_int32, uint8_1d_type, ctypes.c_int32]
+from bc_exploration.exploration_cpp import c_check_for_collision
 
 
-def check_for_collision(state, occupancy_map, footprint_mask, mask_radius, outline_coords, obstacle_values):
+
+def check_for_collision(state, occupancy_map, footprint_mask, outline_coords, obstacle_values):
     """
     Check if the current state with the given footprint is colliding or not.
     :param state array(3)[float]: pose of the robot

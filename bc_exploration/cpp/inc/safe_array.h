@@ -250,7 +250,6 @@ template <class T, ssize_t Dims>
 using safe_array = const typename py::safe_array_mut<T, Dims>;
 } // namespace pybind11
 
-
 namespace pybind11 { namespace detail {
     template <typename T, ssize_t Dims>
     struct pyobject_caster<safe_array_mut<T, Dims>> {

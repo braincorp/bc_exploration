@@ -15,7 +15,7 @@ execute_process(
 include_directories(
         ${PYTHON_INCLUDE_DIRS}
         "${PROJECT_SOURCE_DIR}/inc/"
-        "${PROJECT_SOURCE_DIR}../../deps/pybind11/include"
+        "${PROJECT_SOURCE_DIR}/../../deps/pybind11/include"
 )
 
 set(SOURCE_FILES
@@ -24,8 +24,6 @@ set(SOURCE_FILES
         src/exploration/util.cpp
         )
 
-#add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
-
-add_library(exploration_module SHARED ${PROJECT_SOURCE_DIR} ${SOURCE_FILES} src/exploration/python.cpp)
-target_link_libraries(exploration_module ${PYTHON_LIBRARIES})
-set_target_properties(exploration_module PROPERTIES SUFFIX ".so" PREFIX "_")
+add_library(exploration_cpp SHARED ${PROJECT_SOURCE_DIR} ${SOURCE_FILES} src/exploration/python.cpp)
+target_link_libraries(exploration_cpp ${PYTHON_LIBRARIES})
+set_target_properties(exploration_cpp PROPERTIES SUFFIX ".so" PREFIX "")

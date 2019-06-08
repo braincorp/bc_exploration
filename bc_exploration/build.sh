@@ -9,10 +9,9 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
-
-rm -rf $DIR/cpp/build
-rm -rf $DIR/cpp/bin
-mkdir $DIR/cpp/build
+rm -rf $DIR/cpp/build &&
+rm -rf $DIR/cpp/bin &&
+mkdir $DIR/cpp/build &&
 
 cd $DIR/cpp/build/ &&
 cmake .. &&

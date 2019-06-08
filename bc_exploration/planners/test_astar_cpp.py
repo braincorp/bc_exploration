@@ -9,14 +9,14 @@ import matplotlib.pyplot as plt
 
 from bc_exploration.footprints.footprint_points import get_tricky_circular_footprint
 from bc_exploration.utilities.util import load_occupancy_map_data, rc_to_xy, xy_to_rc
-from bc_exploration.planners.astar_cpp import oriented_astar, get_astar_angles
+from bc_exploration.planners.astar_cpp import astar, oriented_astar, get_astar_angles
 from bc_exploration.utilities.visualization import draw_footprint_path
 from bc_exploration.footprints.footprints import CustomFootprint
 from bc_exploration.mapping.costmap import Costmap
 
 
 def test_one_astar(debug=False):
-    occupancy_map_data = load_occupancy_map_data('test', 'maze_small.png')
+    occupancy_map_data = load_occupancy_map_data('test', 'maze_large.png')
     occupancy_map = Costmap(occupancy_map_data, 0.03, origin=[0., 0.])
 
     obstacle_values = np.array([Costmap.OCCUPIED, Costmap.UNEXPLORED], dtype=np.uint8)
@@ -197,7 +197,7 @@ def debug_real_case():
 
 def main():
     debug = True
-    # test_one_astar(debug=debug)
+    test_one_astar(debug=debug)
     test_oriented_astar(debug=debug)
     # test_multithread_astar(debug=debug)
     # test_impossible_path(debug=debug)

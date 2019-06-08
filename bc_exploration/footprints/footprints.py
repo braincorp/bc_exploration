@@ -151,7 +151,6 @@ class CustomFootprint:
             is_colliding = check_for_collision(state,
                                                occupancy_map,
                                                footprint_mask=footprint_mask,
-                                               mask_radius=mask_radius,
                                                outline_coords=outline_coords,
                                                obstacle_values=obstacle_values)
         else:

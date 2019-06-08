@@ -30,6 +30,7 @@ bool check_for_collision(pybind11::safe_array<int, 1> position,
   int map_shape[2] = {(int) occupancy_map.shape()[0] , (int) occupancy_map.shape()[1]};
 
   // check if footprint it out of bounds -- if so, it is a collision
+  // if in bounds, check if the outline coord is colliding
   for(int i = 0; i < outline_coords.shape()[0]; i++) {
     const int row = outline_coords(i, 0) + position[0];
     const int col = outline_coords(i+1, 1) + position[1];
@@ -39,6 +40,12 @@ bool check_for_collision(pybind11::safe_array<int, 1> position,
 
     if (col < 0 || col >= map_shape[1]) {
       return true;
+    }
+
+    for (int k = 0; k < obstacle_values.shape()[0]; k++){
+      if (occupancy_map(row, col) == obstacle_values[k]) {
+        return true;
+      }
     }
   }
 
@@ -51,7 +58,7 @@ bool check_for_collision(pybind11::safe_array<int, 1> position,
   for (int m = clipped_min_range[0] - min_range[0], i = clipped_min_range[0]; i < clipped_max_range[0] + 1; m++, i++) {
     for(int n = clipped_min_range[1] - min_range[1], j = clipped_min_range[1]; j < clipped_max_range[1] + 1; n++, j++) {
       if (footprint_mask(m, n)) {
-        for (int k = 0; k < obstacle_values.shape()[0]; k++){
+        for (int k = 0; k < obstacle_values.shape()[0]; k++) {
           if (occupancy_map(i, j) == obstacle_values[k]) {
             return true;
           }

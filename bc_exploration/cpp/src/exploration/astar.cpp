@@ -15,16 +15,20 @@ PlanningResult astar(pybind11::safe_array<int, 1> start,
                      bool allow_diagonal) {
   /* A* algorithm
    *
-   * :param start: 1x2 array with start coordinate [row, column]
-   * :param goal: 1x2 array with goal coordinate [row, column]
-   * :param occupancy_map: 1xN*M array of flattened occupancy map
-   * :param map_shape: 1x2 array with (N, M), the shape of the occupancy map
-   * :param planning_scale: value > 1, to plan on a lower resolution than the original occupancy map resolution,
-   *                        this value is round_int(desired resolution / original resolution)
-   * :param mask_size: size of the mask U described above
-   * :param epsilon: weighting for the heuristic in the A* algorithm
-   * :param allow_diagonal: whether to allow diagonal movements
-   * :return path: this function will populate path with the 1d indices of the path from start to goal
+   * :param start array(2)[int32]: start coordinate [row, column]
+   * :param goal array(2)[int32]: goal coordinate [row, column]
+   * :param occupancy_map array(N, M)[uint8]: 2d occupancy map
+   * :param obstacle_values array(N)[uint8]: values in the occupancy map we consider to be obstacles
+   * :param delta float: distance (in pixels) of which we define around the goal coordinate, to consider as the goal
+   *                     if it is 0, we look to plan exactly to the goal coord, if its > 0 then we define the goal region
+   *                     to be that many pixels bigger
+   * :param epsilon float: weighting for the heuristic in the A* algorithm
+   * :param planning_scale int: value > 1, to plan on a lower resolution than the original occupancy map resolution,
+   *                            this value is round_int(desired resolution / original resolution)
+   * :param allow_diagonal bool: whether to allow diagonal movements
+   * :return Tuple[bool, array(N, 2)[int32]]: is_successful - whether the goal pose was reached,
+   *                                          path_px - array of coordinates for the most promising path if not successful
+   *                                                    otherwise it is the path to the goal.
    */
   std::cout << "start plan, ";
 
@@ -182,26 +186,31 @@ OrientedPlanningResult oriented_astar(pybind11::safe_array<int, 1> start,
                                       const bool allow_diagonal) {
   /* Oriented A* algorithm, does not plan on angular space, rather has assigned angles for each movement direction.
    *
-   * :param start: 1x3 array with start coordinate [row, column]
-   * :param goal: 1x3 array with goal coordinate [row, column]
-   * :param occupancy_map: 1xN*M array of flattened occupancy map
-   * :param map_shape: 1x2 array with (N, M), the shape of the occupancy map,
-   * :param planning_scale: value > 1, to plan on a lower resolution than the original occupancy map resolution,
+   * :param start array(2)[float32]: start coordinate [row, column]
+   * :param goal array(2)[float32]: goal coordinate [row, column]
+   * :param occupancy_map array(N, M)[uint8]: 2d occupancy map
+   * :param footprint_masks List[array(U, U)]: U is the size of a UxU mask for checking footprint collision,
+   *                                           where U must be odd, such that U / 2 + 1 is the center pixel,
+   *                                           the mask is true for footprint and false for not footprint,
+   *                                           which is centered among the center pixel in the mask.
+   *                                           Each mask in the list corresponds to a footprint mask for each angle
+   *                                           defined in mask_angles.
+   * :param mask_angles array(8)[float32]: 1x8 array of these angles (in order)
+   *                                       [-pi, -3pi/4, -pi/2, -pi/4, 0, pi/4, pi/2, 3pi/4]
+   *                                       can use the get_astar_angles() function to get these angles.
+   * :param outline_coords array(N, 2)[int32]: coordinates corresponding to the outline of the footprint in ego coordinates
+   *                                           used for quick checking of out of bounds / collisions
+   * :param obstacle_values array(N)[uint8]: values in the occupancy map we consider to be obstacles
+   * :param delta float: distance (in pixels) of which we define around the goal coordinate, to consider as the goal
+   *                     if it is 0, we look to plan exactly to the goal coord, if its > 0 then we define the goal region
+   *                     to be that many pixels bigger
+   * :param epsilon float: weighting for the heuristic in the A* algorithm
+   * :param planning_scale int: value > 1, to plan on a lower resolution than the original occupancy map resolution,
    *                       this value is round_int(desired resolution / original resolution)
-   * :param footprint_masks: 1xU*8 where U is the size of a UxU mask for checking footprint collision,
-   *                         where U must be odd, such that U / 2 + 1 is the center pixel,
-   *                         the mask is true for footprint and false for not footprint,
-   *                         which is centered among the center pixel in the mask
-   * :param mask_angles: 1x8 array of these angles (in order) [-pi, -3pi/4, -pi/2, -pi/4, 0, pi/4, pi/2, 3pi/4]
-   *                     can use the "get_astar_angles function to get these angles.
-   * :param mask_size: size of the mask U described above
-   * :param costmap_scale: multiplier of which to downscale planning by. I.E if original map is 0.03 resolution, and
-   *                       we wish to plan on a 0.1 resolution, costmap_scale = 0.1 / 0.03 = 3.333,
-   *                       if costmap_scale is 1 no downscaling is performed.
-   * :param free_value: value in occupancy_map which is traversable/free
-   * :param epsilon: weighting for the heuristic in the A* algorithm
-   * :param allow_diagonal: whether to allow diagonal movements
-   * :return path: this function will populate path with the 1d indices of the path from start to goal
+   * :param allow_diagonal bool: whether to allow diagonal movements
+   * :return Tuple[bool, array(N, 2)[int32]]: is_successful - whether the goal pose was reached,
+   *                                          path_px - array of coordinates for the most promising path if not successful
+   *                                                    otherwise it is the path to the goal.
    */
 
   std::cout << "start plan, ";

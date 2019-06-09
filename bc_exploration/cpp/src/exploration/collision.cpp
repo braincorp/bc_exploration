@@ -1,10 +1,12 @@
 #include "../../inc/exploration/collision.h"
 #include "../../inc/exploration/util.h"
 
-extern "C" bool check_for_collision(const int* position, const uint8_t* occupancy_map, const int* map_shape,
-                                    const bool* footprint_mask, const int mask_radius,
-                                    const int* outline_coords, const int num_coords,
-                                    const uint8_t* obstacle_values, const int num_obstacle_values) {
+
+bool check_for_collision(pybind11::safe_array<int, 1> position,
+                         pybind11::safe_array<uint8_t, 2> occupancy_map,
+                         pybind11::safe_array<bool, 2> footprint_mask,
+                         pybind11::safe_array<int, 2> outline_coords,
+                         pybind11::safe_array<uint8_t, 1> obstacle_values) {
   /* Collision checking for custom footprints.
    *
    * :param position: 1x2 array with robot coordinate [row, column]
@@ -24,39 +26,46 @@ extern "C" bool check_for_collision(const int* position, const uint8_t* occupanc
    *
    * :return: (bool) whether there is a collision or not
    */
+  int map_shape[2] = {(int) occupancy_map.shape()[0] , (int) occupancy_map.shape()[1]};
 
   // check if footprint it out of bounds -- if so, it is a collision
-  for(int i = 0; i < 2 * num_coords; i += 2) {
-    const int row = outline_coords[i] + position[0];
-    const int col = outline_coords[i+1] + position[1];
+  // if in bounds, check if the outline coord is colliding
+  for(int i = 0; i < outline_coords.shape()[0]; i++) {
+    const int row = outline_coords(i, 0) + position[0];
+    const int col = outline_coords(i, 1) + position[1];
     if (row < 0 || row >= map_shape[0]) {
+      std::cout << "true1" <<std::endl;
       return true;
     }
 
     if (col < 0 || col >= map_shape[1]) {
+      std::cout << "true2" <<std::endl;
       return true;
+    }
+
+    for (int k = 0; k < obstacle_values.shape()[0]; k++){
+      if (occupancy_map(row, col) == obstacle_values[k]) {
+        return true;
+      }
     }
   }
 
+  int mask_radius = (footprint_mask.shape()[0] - 1) / 2;
   int clipped_min_range[2], clipped_max_range[2];
   const int min_range[2] = {position[0] - mask_radius, position[1] - mask_radius};
   const int max_range[2] = {position[0] + mask_radius, position[1] + mask_radius};
   clip_range(min_range, max_range, map_shape, clipped_min_range, clipped_max_range);
 
-  int mask_shape[2] = {2 * mask_radius + 1, 2 * mask_radius + 1};
   for (int m = clipped_min_range[0] - min_range[0], i = clipped_min_range[0]; i < clipped_max_range[0] + 1; m++, i++) {
     for(int n = clipped_min_range[1] - min_range[1], j = clipped_min_range[1]; j < clipped_max_range[1] + 1; n++, j++) {
-      const int mask_idx = index_2d_to_1d(m, n, mask_shape);
-      const int map_idx = index_2d_to_1d(i, j, map_shape);
-      if (footprint_mask[mask_idx]) {
-        for (int k = 0; k < num_obstacle_values; k++){
-          if (occupancy_map[map_idx] == obstacle_values[k]) {
+      if (footprint_mask(m, n)) {
+        for (int k = 0; k < obstacle_values.shape()[0]; k++) {
+          if (occupancy_map(i, j) == obstacle_values[k]) {
             return true;
           }
         }
       }
     }
   }
-
   return false;
 }

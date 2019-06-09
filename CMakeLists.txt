@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.3)
 project(bc_exploration)
 
 set(CMAKE_BUILD_TYPE RELEASE)
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/../)
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bc_exploration)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -O3 -Wall -fpic")
 
 # find current version of python 2.7
@@ -13,17 +13,17 @@ execute_process(
 )
 
 include_directories(
-        ${PYTHON_INCLUDE_DIRS}
-        "${PROJECT_SOURCE_DIR}/inc/"
-        "${PROJECT_SOURCE_DIR}/../../deps/pybind11/include"
+    ${PYTHON_INCLUDE_DIRS}
+    "${PROJECT_SOURCE_DIR}/bc_exploration/cpp/inc/"
+    "${PROJECT_SOURCE_DIR}/deps/pybind11/include"
 )
 
 set(SOURCE_FILES
-        src/exploration/astar.cpp
-        src/exploration/collision.cpp
-        src/exploration/util.cpp
+        bc_exploration/cpp/src/exploration/astar.cpp
+        bc_exploration/cpp/src/exploration/collision.cpp
+        bc_exploration/cpp/src/exploration/util.cpp
         )
 
-add_library(exploration_cpp SHARED ${PROJECT_SOURCE_DIR} ${SOURCE_FILES} src/exploration/python.cpp)
+add_library(exploration_cpp SHARED ${PROJECT_SOURCE_DIR} ${SOURCE_FILES} bc_exploration/cpp/src/exploration/python.cpp)
 target_link_libraries(exploration_cpp ${PYTHON_LIBRARIES})
 set_target_properties(exploration_cpp PROPERTIES SUFFIX ".so" PREFIX "_")

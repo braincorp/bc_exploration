@@ -55,8 +55,9 @@ def test_footprint_orientation(debug=False):
 
 
 def main():
-    # test_custom_footprint(debug=True)
-    test_footprint_orientation(debug=True)
+    debug = False
+    test_custom_footprint(debug=debug)
+    test_footprint_orientation(debug=debug)
 
 
 if __name__ == '__main__':

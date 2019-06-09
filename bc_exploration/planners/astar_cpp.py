@@ -109,8 +109,7 @@ def oriented_astar(start, goal, occupancy_map, footprint_masks,
                                         delta,
                                         epsilon,
                                         planning_scale,
-                                        allow_diagonal
-                                        )
+                                        allow_diagonal)
 
     path = rc_to_xy(path_px, occupancy_map)
     return success, np.vstack(([start], path))

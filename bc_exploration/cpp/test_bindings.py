@@ -12,7 +12,7 @@ def test_bindings(debug=False):
 
     if debug:
         print(bc_exploration.cpp.__doc__)
-        print(bc_exploration.cpp.c_astar.__name__)
+        print(bc_exploration.cpp.c_astar.__doc__)
         print(bc_exploration.cpp.c_oriented_astar.__doc__)
         print(bc_exploration.cpp.c_get_astar_angles.__doc__)
         print(bc_exploration.cpp.c_check_for_collision.__doc__)

@@ -90,8 +90,8 @@ class GridWorld:
         :return bool: whether it is valid or not
         """
         return 0 <= state[0] < self.map.get_size()[0] and 0 <= state[1] < self.map.get_size()[1] \
-            and not (self.footprint.check_for_collision(state=state, occupancy_map=self.map, use_python=False)
-                     if use_inflation else self.footprint_no_inflation.check_for_collision(state=state, occupancy_map=self.map, use_python=False))
+            and not (self.footprint.check_for_collision(state=state, occupancy_map=self.map)
+                     if use_inflation else self.footprint_no_inflation.check_for_collision(state=state, occupancy_map=self.map))
 
     def _load_map(self, filename, map_resolution, thicken_obstacles=True):
         """

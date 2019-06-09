@@ -16,7 +16,6 @@
 using PlanningResult = std::tuple<bool, pybind11::safe_array<int, 2> >;
 using OrientedPlanningResult = std::tuple<bool, pybind11::safe_array<float, 2> >;
 
-
 struct Node {
   float f;
   int idx;
@@ -36,7 +35,6 @@ PlanningResult astar(pybind11::safe_array<int, 1> start,
                      bool allow_diagonal);
 
 std::vector<float> get_astar_angles();
-
 
 OrientedPlanningResult oriented_astar(pybind11::safe_array<int, 1> start,
                                       pybind11::safe_array<int, 1> goal,

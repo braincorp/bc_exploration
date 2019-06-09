@@ -76,6 +76,7 @@ PlanningResult astar(pybind11::safe_array<int, 1> start,
 
     index_1d_to_2d(parent.idx, map_shape, parent_coord);
 
+    // todo planning_scale + delta isnt quite right, maybe max(planning_scale, delta) is correct
     float distance_to_goal = euclidean(parent_coord, &goal(0));
     if (distance_to_goal <= delta || (planning_scale != 1 && distance_to_goal <= planning_scale + delta)) {
       is_successful = true;
@@ -278,6 +279,7 @@ OrientedPlanningResult oriented_astar(pybind11::safe_array<int, 1> start,
       solution_idx = parent.idx;
     }
 
+    // todo planning_scale + delta isnt quite right, maybe max(planning_scale, delta) is correct
     if (distance_to_goal <= delta || (planning_scale != 1 && distance_to_goal <= planning_scale + delta)) {
       is_successful = true;
       solution_idx = parent.idx;

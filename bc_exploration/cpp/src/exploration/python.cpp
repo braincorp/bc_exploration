@@ -34,7 +34,9 @@ PYBIND11_MODULE(exploration_cpp, m) {
                "                 const bool allow_diagonal)\n\n";
   functions += "c_get_astar_angles()\n\n";
 
-  m.doc() = "Python bindings for the bc_exploration c++ code\n\n" + functions;
+  m.doc() = "Python bindings for the bc_exploration c++ code\n"
+            "To have more documentation call the __doc__ method of the function\n\n"
+            "Available functions:\n\n" + functions;
   m.def("c_check_for_collision", &check_for_collision, "Collision checking for custom footprints.                                                                                 \n"
                                                        "                                                                                                                          \n"
                                                        ":param position: 1x2 array with robot coordinate [row, column]                                                            \n"

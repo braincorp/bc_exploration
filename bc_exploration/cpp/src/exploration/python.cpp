@@ -6,7 +6,7 @@
 #include "exploration/astar.h"
 #include "safe_array.h"
 
-PYBIND11_MODULE(exploration_cpp, m) {
+PYBIND11_MODULE(_exploration_cpp, m) {
   std::string functions;
   functions += "c_check_for_collision(pybind11::safe_array<int, 1> position,\n"
                "                      pybind11::safe_array<uint8_t, 2> occupancy_map,\n"
@@ -37,6 +37,7 @@ PYBIND11_MODULE(exploration_cpp, m) {
   m.doc() = "Python bindings for the bc_exploration c++ code\n"
             "To have more documentation call the __doc__ method of the function\n\n"
             "Available functions:\n\n" + functions;
+
   m.def("c_check_for_collision", &check_for_collision, "Collision checking for custom footprints.                                                                                 \n"
                                                        "                                                                                                                          \n"
                                                        ":param position: 1x2 array with robot coordinate [row, column]                                                            \n"

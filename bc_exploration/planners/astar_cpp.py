@@ -6,7 +6,7 @@ from __future__ import print_function, absolute_import, division
 import numpy as np
 
 from bc_exploration.utilities.util import xy_to_rc, rc_to_xy
-from bc_exploration.exploration_cpp import c_astar, c_oriented_astar, c_get_astar_angles
+from bc_exploration.cpp import c_astar, c_oriented_astar, c_get_astar_angles
 
 
 def get_astar_angles():
@@ -56,7 +56,7 @@ def astar(start, goal, occupancy_map, obstacle_values, planning_scale=1, delta=0
     return success, np.vstack(([start], path))
 
 
-def oriented_astar(start, goal, occupancy_map, footprint_masks, mask_radius,
+def oriented_astar(start, goal, occupancy_map, footprint_masks,
                    outline_coords, obstacle_values, planning_scale=1, delta=0.0, epsilon=1.0, allow_diagonal=True):
     """
         Oriented Astar C++ wrapper for python. Formats input data in required format for c++ function, the calls it,
@@ -68,7 +68,6 @@ def oriented_astar(start, goal, occupancy_map, footprint_masks, mask_radius,
                             needed for checking, i.e state[2]. N is 2 * mask_radius + 1,
                             the values are -1 for not footprint, 0 for footprint.
                             N is the dimension across angles, (M, M) is the mask shape
-    :param mask_radius int: (footprint_mask.shape[0] - 1) / 2 the radius of the mask in pixels
     :param outline_coords array(N, 2)[int]: the coordinates that define the outline of the footprint. N is the number
                            of points that define the outline of the footprint
     :param obstacle_values array(N)[uint8]: an array containing values that the collision checker should deem as an obstacle

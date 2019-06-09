@@ -6,8 +6,7 @@ from __future__ import print_function, absolute_import, division
 import numpy as np
 
 from bc_exploration.utilities.util import xy_to_rc
-from bc_exploration.exploration_cpp import c_check_for_collision
-
+from bc_exploration.cpp import c_check_for_collision
 
 
 def check_for_collision(state, occupancy_map, footprint_mask, outline_coords, obstacle_values):
@@ -18,7 +17,6 @@ def check_for_collision(state, occupancy_map, footprint_mask, outline_coords, ob
     :param footprint_mask array(N,N)[int]: mask of the footprint rotated at the corresponding angle
                            needed for checking, i.e state[2]. N is 2 * mask_radius + 1,
                            the values are -1 for not footprint, 0 for footprint.
-    :param mask_radius int: (footprint_mask.shape[0] - 1) / 2 the radius of the mask in pixels
     :param outline_coords array(N, 2)[int]: the coordinates that define the outline of the footprint. N is the number
                            of points that define the outline of the footprint
     :param obstacle_values array(N)[uint8]: an array containing values that the collision checker should deem as an obstacle

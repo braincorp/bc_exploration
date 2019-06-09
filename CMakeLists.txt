@@ -26,4 +26,4 @@ set(SOURCE_FILES
 
 add_library(exploration_cpp SHARED ${PROJECT_SOURCE_DIR} ${SOURCE_FILES} bc_exploration/cpp/src/exploration/python.cpp)
 target_link_libraries(exploration_cpp ${PYTHON_LIBRARIES})
-set_target_properties(exploration_cpp PROPERTIES SUFFIX ".so" PREFIX "")
+set_target_properties(exploration_cpp PROPERTIES SUFFIX ".so" PREFIX "_")

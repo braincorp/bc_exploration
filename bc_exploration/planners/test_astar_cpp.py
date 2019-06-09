@@ -85,13 +85,12 @@ def test_oriented_astar(debug=False):
 
     footprint_masks = footprint.get_footprint_masks(occupancy_map.resolution, angles=angles)
     outline_coords = footprint.get_outline_coords(occupancy_map.resolution, angles=angles)
-    mask_radius = footprint.get_mask_radius(occupancy_map.resolution)
 
     start = rc_to_xy([1956, 137, 0], occupancy_map)
     goal = rc_to_xy([841, 3403, 0.], occupancy_map)
 
     start_time = time.time()
-    success, path = oriented_astar(start, goal, occupancy_map, footprint_masks, mask_radius, outline_coords,
+    success, path = oriented_astar(start, goal, occupancy_map, footprint_masks, outline_coords,
                                    obstacle_values=[0, 127], planning_scale=10)
     time_elapsed = time.time() - start_time
 
@@ -122,13 +121,12 @@ def test_impossible_path(debug=False):
 
     footprint_masks = footprint.get_footprint_masks(occupancy_map.resolution, angles=angles)
     outline_coords = footprint.get_outline_coords(occupancy_map.resolution, angles=angles)
-    mask_radius = footprint.get_mask_radius(occupancy_map.resolution)
 
     start = rc_to_xy([425, 50, 0.], occupancy_map)
     goal = rc_to_xy([232, 339, 0.], occupancy_map)
 
     start_time = time.time()
-    success, path = oriented_astar(start, goal, occupancy_map, footprint_masks, mask_radius, outline_coords,
+    success, path = oriented_astar(start, goal, occupancy_map, footprint_masks, outline_coords,
                                    obstacle_values=[0, 127], planning_scale=10)
     time_elapsed = time.time() - start_time
 
@@ -155,7 +153,6 @@ def debug_real_case():
     goal = data[1]
     occupancy_map = data[2]
     footprint_masks = data[3]
-    mask_radius = data[4]
     outline_coords = data[5]
     obstacle_values = data[6]
     planning_scale = data[7]
@@ -167,7 +164,6 @@ def debug_real_case():
                                    goal=goal,
                                    occupancy_map=occupancy_map,
                                    footprint_masks=footprint_masks,
-                                   mask_radius=mask_radius,
                                    outline_coords=outline_coords,
                                    obstacle_values=obstacle_values,
                                    planning_scale=planning_scale,
@@ -199,8 +195,8 @@ def main():
     debug = True
     test_one_astar(debug=debug)
     test_oriented_astar(debug=debug)
-    # test_multithread_astar(debug=debug)
-    # test_impossible_path(debug=debug)
+    test_multithread_astar(debug=debug)
+    test_impossible_path(debug=debug)
 
     # debug_real_case()
 

@@ -6,7 +6,6 @@ python:
 script:
      # install the package and test
      - pip install -e .[tests]
-#     - ./bc_exploration/build.sh
      - py.test --pep8 -m pep8 -n8
      - py.test -n8
      - ./test_pylint

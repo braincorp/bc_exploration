@@ -8,7 +8,7 @@ extension-pkg-whitelist= bc_exploration._exploration_cpp
 # Add files or directories to the blacklist. They should be base names, not
 # paths.
 # Braincorp: This seems to be buggy for files and works on directories only
-ignore=bc_linters, pybind11
+ignore=bc_linters, pybind11, _exploration_cpp
 
 # Add files or directories matching the regex patterns to the blacklist. The
 # regex matches against base names, not paths.

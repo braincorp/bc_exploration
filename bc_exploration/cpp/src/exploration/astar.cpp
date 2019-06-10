@@ -1,5 +1,5 @@
-#include "../../inc/exploration/astar.h"
-#include "../../inc/exploration/util.h"
+#include "exploration/astar.h"
+#include "exploration/util.h"
 
 bool operator>(const Node &n1, const Node &n2) {
   return n1.f > n2.f;

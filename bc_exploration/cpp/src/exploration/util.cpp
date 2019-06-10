@@ -1,4 +1,4 @@
-#include "../../inc/exploration/util.h"
+#include "exploration/util.h"
 
 
 int index_2d_to_1d(const int* coord, const int* map_shape) {

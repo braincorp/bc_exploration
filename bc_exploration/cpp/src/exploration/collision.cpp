@@ -1,5 +1,5 @@
-#include "../../inc/exploration/collision.h"
-#include "../../inc/exploration/util.h"
+#include "exploration/collision.h"
+#include "exploration/util.h"
 
 
 bool check_for_collision(pybind11::safe_array<int, 1> position,

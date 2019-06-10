@@ -25,7 +25,11 @@ def test_one_astar(debug=False):
     goal = rc_to_xy(np.argwhere(occupancy_map.data == Costmap.FREE)[-1, :], occupancy_map)
 
     start_time = time.time()
-    success, path = astar(start, goal, occupancy_map, obstacle_values=obstacle_values, allow_diagonal=False)
+    success, path = astar(goal=goal,
+                          start=start,
+                          occupancy_map=occupancy_map,
+                          obstacle_values=obstacle_values,
+                          allow_diagonal=False)
     time_elapsed = time.time() - start_time
 
     assert success
@@ -53,13 +57,13 @@ def test_multithread_astar(debug=False):
 
     obstacle_values = np.array([Costmap.OCCUPIED, Costmap.UNEXPLORED], dtype=np.uint8)
 
-    starts = rc_to_xy(np.argwhere(occupancy_map.data == Costmap.FREE)[:num_instances, :], occupancy_map)
-    goal = rc_to_xy(np.argwhere(occupancy_map.data == Costmap.FREE)[-1, :], occupancy_map)
+    start = rc_to_xy(np.argwhere(occupancy_map.data == Costmap.FREE)[0, :], occupancy_map)
+    goals = rc_to_xy(np.argwhere(occupancy_map.data == Costmap.FREE)[-num_instances:, :], occupancy_map)
 
-    astar_fn = partial(astar, goal=goal, occupancy_map=occupancy_map, obstacle_values=obstacle_values)
+    astar_fn = partial(astar, start=start, occupancy_map=occupancy_map, obstacle_values=obstacle_values)
 
     start_time = time.time()
-    results = pool.map(astar_fn, starts)
+    results = pool.map(astar_fn, goals)
     time_elapsed = time.time() - start_time
 
     if debug:
@@ -90,8 +94,13 @@ def test_oriented_astar(debug=False):
     goal = rc_to_xy([841, 3403, 0.], occupancy_map)
 
     start_time = time.time()
-    success, path = oriented_astar(start, goal, occupancy_map, footprint_masks, outline_coords,
-                                   obstacle_values=[0, 127], planning_scale=10)
+    success, path = oriented_astar(goal=goal,
+                                   start=start,
+                                   occupancy_map=occupancy_map,
+                                   footprint_masks=footprint_masks,
+                                   outline_coords=outline_coords,
+                                   obstacle_values=[0, 127],
+                                   planning_scale=10)
     time_elapsed = time.time() - start_time
 
     assert success
@@ -126,8 +135,13 @@ def test_impossible_path(debug=False):
     goal = rc_to_xy([232, 339, 0.], occupancy_map)
 
     start_time = time.time()
-    success, path = oriented_astar(start, goal, occupancy_map, footprint_masks, outline_coords,
-                                   obstacle_values=[0, 127], planning_scale=10)
+    success, path = oriented_astar(goal=goal,
+                                   start=start,
+                                   occupancy_map=occupancy_map,
+                                   footprint_masks=footprint_masks,
+                                   outline_coords=outline_coords,
+                                   obstacle_values=[0, 127],
+                                   planning_scale=10)
     time_elapsed = time.time() - start_time
 
     if debug:
@@ -160,8 +174,8 @@ def debug_real_case():
     epsilon = data[9]
 
     start_time = time.time()
-    success, path = oriented_astar(start=start,
-                                   goal=goal,
+    success, path = oriented_astar(goal=goal,
+                                   start=start,
                                    occupancy_map=occupancy_map,
                                    footprint_masks=footprint_masks,
                                    outline_coords=outline_coords,

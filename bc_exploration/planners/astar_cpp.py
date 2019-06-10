@@ -18,11 +18,11 @@ def get_astar_angles():
     return c_angles
 
 
-def astar(start, goal, occupancy_map, obstacle_values, planning_scale=1, delta=0.0, epsilon=1.0, allow_diagonal=False):
+def astar(goal, start, occupancy_map, obstacle_values, planning_scale=1, delta=0.0, epsilon=1.0, allow_diagonal=False):
     """
     Wrapper for vanilla a-star c++ planning. given a start and end and a map, give a path.
-    :param start array(3)[float]: [x, y, theta] start pose of the robot
     :param goal array(3)[float]: [x, y, theta] goal pose of the robot
+    :param start array(3)[float]: [x, y, theta] start pose of the robot
     :param occupancy_map Costmap: occupancy map used for planning, data must be compatible with uint8
     :param obstacle_values array(N)[uint8]: an array containing values that the collision checker should deem as an obstacle
                              i.e [127, 0]
@@ -56,13 +56,13 @@ def astar(start, goal, occupancy_map, obstacle_values, planning_scale=1, delta=0
     return success, np.vstack(([start], path))
 
 
-def oriented_astar(start, goal, occupancy_map, footprint_masks,
+def oriented_astar(goal, start, occupancy_map, footprint_masks,
                    outline_coords, obstacle_values, planning_scale=1, delta=0.0, epsilon=1.0, allow_diagonal=True):
     """
         Oriented Astar C++ wrapper for python. Formats input data in required format for c++ function, the calls it,
     returning the path if found.
-    :param start array(3)[float]: [x, y, theta] start pose of the robot
     :param goal array(3)[float]: [x, y, theta] goal pose of the robot
+    :param start array(3)[float]: [x, y, theta] start pose of the robot
     :param occupancy_map Costmap: occupancy map used for planning, data must be compatible with uint8
     :param footprint_masks array(N,M,M)[int]: masks of the footprint rotated at the corresponding angles
                             needed for checking, i.e state[2]. N is 2 * mask_radius + 1,

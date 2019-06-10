@@ -34,12 +34,10 @@ bool check_for_collision(pybind11::safe_array<int, 1> position,
     const int row = outline_coords(i, 0) + position[0];
     const int col = outline_coords(i, 1) + position[1];
     if (row < 0 || row >= map_shape[0]) {
-      std::cout << "true1" <<std::endl;
       return true;
     }
 
     if (col < 0 || col >= map_shape[1]) {
-      std::cout << "true2" <<std::endl;
       return true;
     }
 

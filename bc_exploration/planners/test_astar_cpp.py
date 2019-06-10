@@ -79,7 +79,7 @@ def test_multithread_astar(debug=False):
 
 
 def test_oriented_astar(debug=False):
-    occupancy_map_data = load_occupancy_map_data('brain', 'big_target.png')
+    occupancy_map_data = load_occupancy_map_data('brain', 'big_retail.png')
     occupancy_map = Costmap(occupancy_map_data, 0.03, origin=[0., 0.])
 
     footprint_points = get_tricky_circular_footprint()

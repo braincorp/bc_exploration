@@ -21,7 +21,7 @@ setup(
     install_requires=['numpy>=1.11.0',
                       'matplotlib==2.2.3',
                       'opencv-python',
-                      'pyyaml==5.1'],
+                      'pyyaml==5.4'],
     package_data={'': ['input']},
     include_package_data=True,
         extras_require={
